@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RA con reconocimiento de imagen</title>
+    <meta charset="utf-8" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://cdn.glitch.global/bb0dd7fe-e297-4b87-97a5-53b28906265a/latarLogoC2.webp?v=1732225837570"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css2?family=Michroma&display=swap" rel="stylesheet">
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-rounded-plane-component/dist/aframe-rounded-plane.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.1.3/dist/mindar-image.prod.js"></script>
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.1.3/dist/mindar-image-aframe.prod.js"></script>
+    <script src="https://rawgit.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div class="logoload"></div>
+    <div id="button-container">
+      <button class="action-buttonw" id="google-button">
+        Empieza AQUI<img
+          src="/assets/whats.png"
+          alt="icono"
+          class="button-icon"
+        />
+      </button>
+      <button class="action-buttoni" id="openai-button">Instagram</button>
+    </div>
+    <div id="example-scanning-overlay" class="hidden">
+      <div class="inner">
+        <img
+          src="/assets/trozmerTarget.jpg"
+        />
+        <div id="texto-a-ocultar">Apunta a la Imágen</div>
+        <div id="logo">
+          <img
+            src="/assets/trozmerLogo.png"
+            alt="Tu Logo"
+          />
+        </div>
+        <div class="scanline"></div>
+      </div>
+    </div>
+    <div id="bottom-button-container">
+  <button id="google-link" class="action-button">
+    <img src="/assets/insta.png" alt="Google" class="button-icon" />
+  </button>
+  <button id="facebook-link" class="action-button">
+    <img src="/assets/design.png" alt="Facebook" class="button-icon" />
+  </button>
+</div>
+    <a-scene
+      mindar-image="uiScanning: #example-scanning-overlay; imageTargetSrc: assets/trozmer.mind; smoothingFactor: 0.8; maxTrackFrames: 5;"
+      loading-screen="enabled:false"
+      color-space="sRGB"
+      renderer="colorManagement: true, physicallyCorrectLights"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
+    >
+      <a-assets>
+        <a-asset-item
+          id="avatarModel"
+          src="/assets/caballo.glb"
+        ></a-asset-item>
+        <!-- Mapa ambiental para efecto metálico -->
+        <img
+          id="envMap"
+          src="/Assets/metallic-textured-background.webp"
+        />
+      </a-assets>
+      <a-camera
+        position="0 0 2"
+        look-controls="enabled: false"
+        cursor="fuse: false; rayOrigin: mouse;"
+        raycaster="near: 10; far: 10000; objects: .clickable"
+      ></a-camera>
+      <a-entity id="mytarget" mytarget mindar-image-target="targetIndex: 0">
+        <a-gltf-model
+          rotation="0 -90 -90 "
+          position="0 0 .005"
+          scale=".8 .8 .8"
+          src="#avatarModel"
+          animation-mixer="clip: *; loop: repeat; repetitions: Infinity; timeScale: 1; crossFadeDuration: 0.3"
+        ></a-gltf-model>
+      </a-entity>
+    </a-scene>
+    <script>
+      // Agregar interactividad a los hotspots
+      const hotspots = [
+        { id: "hotspot1", textId: "text1", bgId: "bg1" },
+        { id: "hotspot2", textId: "text2", bgId: "bg2" },
+        { id: "hotspot3", textId: "text3", bgId: "bg3" },
+      ];
+
+      hotspots.forEach(({ id, textId, bgId }) => {
+        const hotspot = document.getElementById(id);
+        const text = document.getElementById(textId);
+        const bg = document.getElementById(bgId);
+
+        if (hotspot && text && bg) {
+          hotspot.addEventListener("click", () => {
+            const isVisible = text.getAttribute("visible");
+            text.setAttribute("visible", !isVisible);
+            bg.setAttribute("visible", !isVisible);
+          });
+        }
+      });
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>
