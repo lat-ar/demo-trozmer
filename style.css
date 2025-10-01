@@ -61,7 +61,7 @@
 }
 @media (max-aspect-ratio: 1/1) {
   #example-scanning-overlay .inner {
-    width: 80vw;
+    width: 85vw;
     height: 105vw;
   }
 }
@@ -118,10 +118,10 @@
   left: 50%; /* Posiciona el contenedor a la mitad de la pantalla */
   width: 80%; /* Define el ancho del contenedor */
   height: 50px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(240, 240, 240, 0.25) 50%, rgba(255, 255, 255, 0.2) 100%);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.35) 0%, rgba(240, 240, 240, 0.25) 50%, rgba(255, 255, 255, 0.2) 100%);
   -webkit-backdrop-filter: blur(10px) saturate(120%);
   backdrop-filter: blur(10px) saturate(120%);
-  border-radius: 30px; /* Añade esquinas redondeadas. Ajusta el valor para el radio deseado. */
+  border-radius: 10px; /* Añade esquinas redondeadas. Ajusta el valor para el radio deseado. */
   display: flex;
   justify-content: center; /* Centra horizontalmente el contenido */
   align-items: center; /* Centra verticalmente el contenido */
