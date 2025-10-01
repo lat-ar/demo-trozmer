@@ -65,9 +65,10 @@
       mindar-image="uiScanning: #example-scanning-overlay; imageTargetSrc: assets/trozmer.mind; smoothingFactor: 0.8; maxTrackFrames: 5;"
       loading-screen="enabled:false"
       color-space="sRGB"
-      renderer="colorManagement: true, physicallyCorrectLights"
+      renderer="colorManagement: true; physicallyCorrectLights: true; toneMapping: ACESFilmic; toneMappingExposure: 1.35; antialias: true"
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
+      shadow="type: pcfsoft"
     >
       <a-assets>
         <a-asset-item
@@ -87,11 +88,16 @@
         raycaster="near: 10; far: 10000; objects: .clickable"
       ></a-camera>
       <a-entity id="mytarget" mytarget mindar-image-target="targetIndex: 0">
+        <!-- Iluminación: ambiente y direccionales para iluminar el modelo en AR -->
+        <a-entity light="type: ambient; intensity: 0.9"></a-entity>
+        <a-entity light="type: directional; intensity: 1.4; castShadow: true" position="1 2 1"></a-entity>
+        <a-entity light="type: directional; intensity: 0.8; castShadow: true" position="-1 2 -1"></a-entity>
         <a-gltf-model
           rotation="0 0 0 "
           position="0 0 0"
           scale=".05 .05 .05"
           src="#avatarModel"
+          shadow="cast: true; receive: true"
           animation-mixer="clip: *; loop: repeat; repetitions: Infinity; timeScale: 1; crossFadeDuration: 0.3"
         ></a-gltf-model>
       </a-entity>
