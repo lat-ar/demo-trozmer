@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       // Dispara el fade-in cuando se detecta el target
       if (hasInitializedOpacity && fadeMeshes.length) {
-        fadeTo(1.0, 1000);
+        fadeTo(1.0, 1300);
       }
     });
 
