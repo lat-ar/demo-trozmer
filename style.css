@@ -62,7 +62,7 @@
 @media (max-aspect-ratio: 1/1) {
   #example-scanning-overlay .inner {
     width: 80vw;
-    height: 95vw;
+    height: 105vw;
   }
 }
 #example-scanning-overlay .inner {
