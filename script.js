@@ -78,15 +78,73 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const myTarget = document.getElementById("mytarget");
   if (myTarget) {
+    // Fade-in del modelo 3D al detectar la imagen
+    const gltfEl = document.querySelector('#mytarget a-gltf-model');
+    let fadeMeshes = [];
+    let hasInitializedOpacity = false;
+
+    function collectMeshesAndSetTransparent(object3D) {
+      const meshes = [];
+      object3D.traverse((node) => {
+        if (node.isMesh && node.material) {
+          const materialArray = Array.isArray(node.material) ? node.material : [node.material];
+          materialArray.forEach((mat) => {
+            mat.transparent = true;
+            mat.opacity = 0.0;
+          });
+          meshes.push(node);
+        }
+      });
+      return meshes;
+    }
+
+    function setOpacityForMeshes(meshes, value) {
+      meshes.forEach((mesh) => {
+        const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+        mats.forEach((mat) => { mat.opacity = value; });
+      });
+    }
+
+    function fadeTo(targetOpacity, durationMs = 1000) {
+      if (!fadeMeshes.length) return;
+      const startOpacity = (fadeMeshes[0] && (Array.isArray(fadeMeshes[0].material) ? fadeMeshes[0].material[0].opacity : fadeMeshes[0].material.opacity)) ?? 0;
+      const startTime = performance.now();
+      function step(now) {
+        const t = Math.min(1, (now - startTime) / durationMs);
+        const eased = t; // linear; swap for easing if desired
+        const current = startOpacity + (targetOpacity - startOpacity) * eased;
+        setOpacityForMeshes(fadeMeshes, current);
+        if (t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    if (gltfEl) {
+      gltfEl.addEventListener('model-loaded', () => {
+        if (!hasInitializedOpacity) {
+          fadeMeshes = collectMeshesAndSetTransparent(gltfEl.getObject3D('mesh'));
+          hasInitializedOpacity = true;
+        }
+      });
+    }
+
     myTarget.addEventListener("targetFound", function () {
       if (buttonContainer) {
         buttonContainer.style.display = "flex";
+      }
+      // Dispara el fade-in cuando se detecta el target
+      if (hasInitializedOpacity && fadeMeshes.length) {
+        fadeTo(1.0, 1000);
       }
     });
 
     myTarget.addEventListener("targetLost", function () {
       if (buttonContainer) {
         buttonContainer.style.display = "none";
+      }
+      // Opcional: ocultar nuevamente el modelo (para permitir re-revelar)
+      if (hasInitializedOpacity && fadeMeshes.length) {
+        setOpacityForMeshes(fadeMeshes, 0.0);
       }
     });
   }
